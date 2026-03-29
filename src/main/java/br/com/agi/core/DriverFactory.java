@@ -16,6 +16,12 @@ public class DriverFactory {
         if (driver == null) {
             WebDriverManager.chromedriver().setup();
             ChromeOptions options = new ChromeOptions();
+
+            String chromePath = System.getenv("CHROME_PATH");
+            if (chromePath != null && !chromePath.isEmpty()) {
+                options.setBinary(chromePath);
+            }
+
             options.addArguments("--remote-allow-origins=*");
             options.addArguments("--disable-notifications");
             options.addArguments("--window-size=1920,1080");

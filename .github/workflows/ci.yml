@@ -28,11 +28,14 @@ jobs:
           cache: maven
 
       - name: Setup Chrome
+        id: setup-chrome
         uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: stable
 
       - name: Run tests and generate reports
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: mvn -B clean verify
 
       - name: Upload test reports
