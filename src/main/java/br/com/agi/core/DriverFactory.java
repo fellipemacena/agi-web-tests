@@ -1,12 +1,11 @@
 package br.com.agi.core;
 
-import java.time.Duration;
-
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
+import java.time.Duration;
 
 public class DriverFactory {
 
@@ -15,34 +14,24 @@ public class DriverFactory {
 
     public static WebDriver getDriver() {
         if (driver == null) {
+            WebDriverManager.chromedriver().setup();
             ChromeOptions options = new ChromeOptions();
-
-            String chromePath = System.getenv("CHROME_PATH");
-            String browserVersionMajor = System.getenv("BROWSER_VERSION_MAJOR");
-            if (browserVersionMajor != null && !browserVersionMajor.isEmpty()) {
-                WebDriverManager.chromedriver().browserVersion(browserVersionMajor).setup();
-            } else {
-                WebDriverManager.chromedriver().setup();
-            }
-            if (chromePath != null && !chromePath.isEmpty()) {
-                options.setBinary(chromePath);
-            }
-
             options.addArguments("--remote-allow-origins=*");
             options.addArguments("--disable-notifications");
             options.addArguments("--window-size=1920,1080");
+            
             boolean isHeadless = !"true".equalsIgnoreCase(System.getenv("NOHEADLESS"));
             if (isHeadless) {
                 options.addArguments("--headless=new");
                 options.addArguments("--no-sandbox");
             }
-
+            
             driver = new ChromeDriver(options);
-
+            
             if (!isHeadless) {
                 driver.manage().window().maximize();
             }
-
+            
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
             driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
         }

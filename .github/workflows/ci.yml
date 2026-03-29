@@ -9,47 +9,20 @@ on:
 
 jobs:
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "17"
           cache: maven
 
-      - name: Setup Chrome
-        id: setup-chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: stable
-
-      - name: Detect Chrome version
-        shell: pwsh
-        run: |
-          $chromePath = "${{ steps.setup-chrome.outputs.chrome-path }}"
-          $chromeVersionOutput = & "$chromePath" --version
-          $chromeVersion = ($chromeVersionOutput -replace '[^0-9\.]', '')
-          $chromeMajorVersion = $chromeVersion.Split('.')[0]
-          "CHROME_PATH=$chromePath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "BROWSER_VERSION_MAJOR=$chromeMajorVersion" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Run tests and generate reports
+      - name: Run tests
         env:
           CI: "true"
-        run: mvn -B clean verify
-
-      - name: Upload test reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-reports-windows
-          path: |
-            target/allure-results
-            target/site/allure-maven-plugin
-            target/surefire-reports
-            target/reports/surefire-report.html
+        run: mvn -B clean test
