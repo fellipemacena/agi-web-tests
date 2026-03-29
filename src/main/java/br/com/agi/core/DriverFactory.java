@@ -18,7 +18,12 @@ public class DriverFactory {
             ChromeOptions options = new ChromeOptions();
 
             String chromePath = System.getenv("CHROME_PATH");
-            WebDriverManager.chromedriver().setup();
+            String browserVersionMajor = System.getenv("BROWSER_VERSION_MAJOR");
+            if (browserVersionMajor != null && !browserVersionMajor.isEmpty()) {
+                WebDriverManager.chromedriver().browserVersion(browserVersionMajor).setup();
+            } else {
+                WebDriverManager.chromedriver().setup();
+            }
             if (chromePath != null && !chromePath.isEmpty()) {
                 options.setBinary(chromePath);
             }

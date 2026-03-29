@@ -28,9 +28,19 @@ jobs:
         with:
           chrome-version: stable
 
+      - name: Detect Chrome version
+        shell: pwsh
+        run: |
+          $chromePath = "${{ steps.setup-chrome.outputs.chrome-path }}"
+          $chromeVersionOutput = & "$chromePath" --version
+          $chromeVersion = ($chromeVersionOutput -replace '[^0-9\.]', '')
+          $chromeMajorVersion = $chromeVersion.Split('.')[0]
+          "CHROME_PATH=$chromePath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "BROWSER_VERSION_MAJOR=$chromeMajorVersion" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
       - name: Run tests and generate reports
         env:
-          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          CI: "true"
         run: mvn -B clean verify
 
       - name: Upload test reports
