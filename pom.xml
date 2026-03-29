@@ -13,8 +13,8 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.jupiter.version>5.10.0</junit.jupiter.version>
-        <selenium.version>4.21.0</selenium.version>
-        <webdrivermanager.version>5.8.0</webdrivermanager.version>
+        <selenium.version>4.25.0</selenium.version>
+        <webdrivermanager.version>5.9.0</webdrivermanager.version>
     </properties>
 
     <dependencies>

@@ -18,15 +18,21 @@ public class DriverFactory {
             ChromeOptions options = new ChromeOptions();
             options.addArguments("--remote-allow-origins=*");
             options.addArguments("--disable-notifications");
-            if ("true".equalsIgnoreCase(System.getenv("CI"))) {
+            options.addArguments("--window-size=1920,1080");
+            
+            boolean isHeadless = !"true".equalsIgnoreCase(System.getenv("NOHEADLESS"));
+            if (isHeadless) {
                 options.addArguments("--headless=new");
                 options.addArguments("--no-sandbox");
-                options.addArguments("--disable-dev-shm-usage");
-                options.addArguments("--window-size=1920,1080");
             }
+            
             driver = new ChromeDriver(options);
-            driver.manage().window().maximize();
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+            
+            if (!isHeadless) {
+                driver.manage().window().maximize();
+            }
+            
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
             driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
         }
         return driver;

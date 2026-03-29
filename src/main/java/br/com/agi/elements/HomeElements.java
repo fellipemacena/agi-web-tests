@@ -19,4 +19,15 @@ public class HomeElements {
     public By suasFinancasPageTitle() {
         return By.xpath("(//h1[normalize-space()='Suas finanças'])[1]");
     }
+
+    public By cookieConsentButton() {
+        return By.xpath(
+            "//*[self::button or self::a][" +
+            "normalize-space()='Aceitar' or normalize-space()='Aceitar tudo' or " +
+            "normalize-space()='Concordo' or normalize-space()='Concordar' or " +
+            "contains(translate(normalize-space(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'aceitar') or " +
+            "contains(@class,'accept') or contains(@id,'accept') or " +
+            "contains(@class,'lgpd') or contains(@id,'lgpd')]"
+        );
+    }
 }
