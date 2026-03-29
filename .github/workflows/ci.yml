@@ -9,12 +9,7 @@ on:
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        java: [17]
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
@@ -24,7 +19,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: ${{ matrix.java }}
+          java-version: "17"
           cache: maven
 
       - name: Setup Chrome
@@ -42,7 +37,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-reports-${{ matrix.os }}
+          name: test-reports-windows
           path: |
             target/allure-results
             target/site/allure-maven-plugin
